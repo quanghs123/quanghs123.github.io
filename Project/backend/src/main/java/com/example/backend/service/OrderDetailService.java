@@ -1,0 +1,12 @@
+package com.example.backend.service;
+
+import com.example.backend.model.DTO.OrderDetailDTO;
+import com.example.backend.model.OrderDetail;
+
+import java.util.List;
+
+public interface OrderDetailService {
+    List<OrderDetail> findOrderDetailByOrderId(Long orderID);
+    OrderDetail save(OrderDetailDTO orderDetailDto);
+    Long deleteOrderDetailByOrderID(Long orderID);
+}
