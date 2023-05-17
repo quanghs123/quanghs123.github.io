@@ -1,6 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.FavoriteKey;
 import com.example.backend.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,11 @@ public class FavoriteController {
     ResponseEntity<?> getFavoriteById(@RequestParam(value = "accountID") Long accountID,
                                       @RequestParam(value = "productID") Long productID){
         return ResponseEntity.ok(favoriteService.getExists(accountID,productID));
+    }
+
+    @GetMapping("/findTop5Product")
+    ResponseEntity<?> findTop5Product(){
+        return ResponseEntity.ok(favoriteService.findTop5Product());
     }
     @PostMapping("/addfavorite")
     ResponseEntity<?> save(@RequestParam(value = "accountID") Long accountID,

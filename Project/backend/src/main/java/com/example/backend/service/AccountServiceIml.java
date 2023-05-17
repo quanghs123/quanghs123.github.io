@@ -10,6 +10,8 @@ import com.example.backend.repository.AccountRepository;
 import com.example.backend.sendmail.MyConstants;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -104,5 +106,10 @@ public class AccountServiceIml implements AccountService {
         account.setPassword(passwordEncoder.encode(pwd));
         accountRepository.save(account);
         return true;
+    }
+
+    @Override
+    public Page<Account> findAllAcc(Long accountID, Pageable pageable) {
+        return accountRepository.findAllAcc(accountID,pageable);
     }
 }

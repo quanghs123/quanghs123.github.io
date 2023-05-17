@@ -16,8 +16,7 @@ public interface ViewService {
             .create();
 
     ViewService viewService = new Retrofit.Builder()
-//            .baseUrl("http://192.168.70.160:8080")
-            .baseUrl("http://192.168.0.102:8080")
+            .baseUrl("http://192.168.70.160:8080")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ViewService.class);

@@ -9,6 +9,8 @@ import com.example.backend.repository.BrandRepository;
 import com.example.backend.repository.ProductRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +24,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Service
-public class ProductServiceIml implements ProductService{
+public class ProductServiceIml implements ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -38,7 +40,7 @@ public class ProductServiceIml implements ProductService{
     @Override
     public ProductDTO findById(Long id) {
         return productFactory.mapperFromEntityToDTO(productRepository.findById(id)
-                .orElseThrow(()->new NotFoundException("Could not found the brand with id = " + id)));
+                .orElseThrow(() -> new NotFoundException("Could not found the brand with id = " + id)));
     }
 
     @Override
@@ -55,7 +57,7 @@ public class ProductServiceIml implements ProductService{
     public Product save(ProductDTO productDTO) {
         Product product = new Product();
         product.setProductName(productDTO.getProductName());
-        getImageName(productDTO,product);
+        getImageName(productDTO, product);
         long millis = System.currentTimeMillis();
         Date date = new Date(millis);
         product.setDate(date);
@@ -72,7 +74,7 @@ public class ProductServiceIml implements ProductService{
     }
 
     @Override
-    public Product update(ProductDTO productDTO,Long id) {
+    public Product update(ProductDTO productDTO, Long id) {
         return productRepository.findById(id)
                 .map(product -> {
                     product.setProductName(productDTO.getProductName());
@@ -114,12 +116,32 @@ public class ProductServiceIml implements ProductService{
 
     @Override
     public List<Product> searchProductWithPrice(String productName, Float priceFrom, Float priceTo) {
-        return productRepository.searchProductWithPrice(productName,priceFrom,priceTo);
+        return productRepository.searchProductWithPrice(productName, priceFrom, priceTo);
     }
 
     @Override
     public List<Product> searchProductWithoutPrice(String productName) {
         return productRepository.searchProductWithoutPrice(productName);
+    }
+
+    @Override
+    public Boolean updateProductQuantity(Long productID, int quantity, Boolean flag) {
+        Product product = productRepository.findById(productID).
+                orElseThrow(() -> new NotFoundException("Could not found the brand with id = " + productID));
+        if(flag){
+            if(product.getProductQuantity() > quantity){
+                product.setProductQuantity(product.getProductQuantity() - quantity);
+            }else return false;
+        }else{
+            product.setProductQuantity(product.getProductQuantity() + quantity);
+        }
+        productRepository.save(product);
+        return true;
+    }
+
+    @Override
+    public Page<Product> findAllPr(Pageable pageable) {
+        return productRepository.findAllPr(pageable);
     }
 
     private static void getImageName(ProductDTO productDTO, Product product) {

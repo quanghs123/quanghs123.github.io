@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/**").permitAll()
 
                 .requestMatchers("/api/v1/brand/getall").permitAll()
+                .requestMatchers("/api/v1/brand/getAll/findAllBr").permitAll()
                 .requestMatchers("/api/v1/brand/editbrand/noimage/**").hasAnyAuthority("ADMIN")
                 .requestMatchers("/api/v1/brand/editbrand/withimage/**").hasAnyAuthority("ADMIN")
                 .requestMatchers("/api/v1/brand/addbrand").hasAnyAuthority("ADMIN")
@@ -39,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/brand/deletebrand/**").hasAnyAuthority("ADMIN")
 
                 .requestMatchers("/api/v1/favorite/getfavoritebyproductid/**").permitAll()
+                .requestMatchers("/api/v1/favorite/findTop5Product").hasAnyAuthority("ADMIN")
                 .requestMatchers("/api/v1/favorite/getfavoritebyid").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/v1/favorite/addfavorite").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/v1/favorite/deletefavorite").hasAnyAuthority("USER","ADMIN")
@@ -50,15 +52,22 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/cart/delete").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/v1/cart/deletebyaccountid/**").hasAnyAuthority("USER","ADMIN")
 
+                .requestMatchers("/api/v1/order/getall").permitAll()
+                .requestMatchers("/api/v1/order/getAll/findAllOr").permitAll()
                 .requestMatchers("/api/v1/order/addorder").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/v1/order/getbyaccountid/**").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/v1/order/getbyaccountid1/**").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/v1/order/deleteorder/**").hasAnyAuthority("USER","ADMIN")
+                .requestMatchers("/api/v1/order/editorder/**").permitAll()
+
                 .requestMatchers("/api/v1/orderdetail/addorderdetail").hasAnyAuthority("USER","ADMIN")
+                .requestMatchers("/api/v1/orderdetail/findTop5Product").hasAnyAuthority("ADMIN")
+                .requestMatchers("/api/v1/orderdetail/revenueYear").permitAll()
                 .requestMatchers("/api/v1/orderdetail/getbyorderid/**").hasAnyAuthority("USER","ADMIN")
                 .requestMatchers("/api/v1/orderdetail/deleteorderdetail/**").hasAnyAuthority("USER","ADMIN")
 
                 .requestMatchers("/api/v1/product/getall").permitAll()
+                .requestMatchers("/api/v1/product/getAll/findAllPr").permitAll()
                 .requestMatchers("/api/v1/product/searchProductWithPrice").permitAll()
                 .requestMatchers("/api/v1/product/searchProductWithoutPrice").permitAll()
                 .requestMatchers("/api/v1/product/findFavoriteByAccountID/**").hasAnyAuthority("USER")
@@ -68,10 +77,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/product/addproduct").hasAnyAuthority("ADMIN")
                 .requestMatchers("/api/v1/product/getbyid/**").permitAll()
                 .requestMatchers("/api/v1/product/findByBrandID/**").permitAll()
+                .requestMatchers("/api/v1/product/updateproductquantity/**").hasAnyAuthority("USER","ADMIN")
 
                 .requestMatchers("/api/v1/account/changeAccount/**").hasAnyAuthority("ADMIN","USER")
                 .requestMatchers("/api/v1/account/forgotPassword").permitAll()
                 .requestMatchers("/api/v1/account/getall").permitAll()
+                .requestMatchers("/api/v1/account/getAll/findAllAcc").permitAll()
                 .requestMatchers("/api/v1/account/editaccount/**").hasAnyAuthority("USER")
                 .requestMatchers("/api/v1/account/addaccount").hasAnyAuthority("ADMIN")
                 .requestMatchers("/api/v1/account/getbyid/**").permitAll()

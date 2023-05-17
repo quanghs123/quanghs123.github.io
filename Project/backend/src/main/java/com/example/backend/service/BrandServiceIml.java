@@ -6,6 +6,8 @@ import com.example.backend.model.Brand;
 import com.example.backend.model.DTO.BrandDTO;
 import com.example.backend.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,6 +56,11 @@ public class BrandServiceIml implements BrandService {
                     }
                     return brandRepository.save(brand);
                 }).orElseThrow(() -> new NotFoundException("Could not found the brand with id = " + id));
+    }
+
+    @Override
+    public Page<Brand> findAllBr(Pageable pageable) {
+        return brandRepository.findAllBr(pageable);
     }
 
     @Override

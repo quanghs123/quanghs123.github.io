@@ -1,11 +1,14 @@
 package com.example.backend.controller;
 
 
+import com.example.backend.model.Account;
 import com.example.backend.model.DTO.ProductDTO;
 import com.example.backend.model.Product;
 import com.example.backend.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +35,9 @@ public class ProductController {
     ResponseEntity<?> searchProduct(@RequestParam(value = "productName") String productName,
                                     @RequestParam(value = "priceFrom") Float priceFrom,
                                     @RequestParam(value = "priceTo") Float priceTo) {
-        return ResponseEntity.ok(productService.searchProductWithPrice(productName,priceFrom,priceTo));
+        return ResponseEntity.ok(productService.searchProductWithPrice(productName, priceFrom, priceTo));
     }
+
     @GetMapping("/searchProductWithoutPrice")
     ResponseEntity<?> searchProduct(@RequestParam(value = "productName") String productName) {
         return ResponseEntity.ok(productService.searchProductWithoutPrice(productName));
@@ -130,5 +134,20 @@ public class ProductController {
         } catch (IllegalArgumentException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), ex);
         }
+    }
+
+    @PutMapping("/updateproductquantity/{productID}")
+    ResponseEntity<?> updateProductQuantity(@RequestParam(value = "quantity") int quantity,
+                                            @RequestParam(value = "flag") Boolean flag,
+                                            @PathVariable(value = "productID") Long productID) {
+        return ResponseEntity.ok(productService.updateProductQuantity(productID, quantity, flag));
+    }
+
+    @GetMapping("/getAll/findAllPr")
+    public ResponseEntity<?> findAllPr(@RequestParam("offset") int offset,
+                                        @RequestParam("pageSize") int pageSize) {
+        Page<Product> products = productService.findAllPr(PageRequest.of(offset, pageSize));
+        return ResponseEntity.ok(products);
+
     }
 }

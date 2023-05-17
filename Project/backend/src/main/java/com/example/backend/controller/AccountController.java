@@ -5,6 +5,8 @@ import com.example.backend.model.DTO.AccountDTO;
 import com.example.backend.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -117,6 +119,15 @@ public class AccountController {
         } catch (IllegalArgumentException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), ex);
         }
+    }
+
+    @GetMapping("/getAll/findAllAcc")
+    public ResponseEntity<?> findAllAcc(@RequestParam("accountID") Long accountID,
+                                        @RequestParam("offset") int offset,
+                                        @RequestParam("pageSize") int pageSize) {
+        Page<Account> accounts = accountService.findAllAcc(accountID, PageRequest.of(offset, pageSize));
+        return ResponseEntity.ok(accounts);
+
     }
 
 }

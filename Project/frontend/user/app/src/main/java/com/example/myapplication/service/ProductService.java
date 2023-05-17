@@ -15,6 +15,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,8 +25,8 @@ public interface ProductService {
             .create();
 
     ProductService productService = new Retrofit.Builder()
-//            .baseUrl("http://192.168.70.160:8080")
-            .baseUrl("http://192.168.0.102:8080")
+            .baseUrl("http://192.168.70.160:8080")
+
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ProductService.class);
@@ -48,4 +49,9 @@ public interface ProductService {
                                                @Query("priceTo") Float priceTo);
     @GET("/api/v1/product/searchProductWithoutPrice")
     Call<List<Product>> searchProductWithoutPrice(@Query("productName") String productName);
+    @PUT("/api/v1/product/updateproductquantity/{productID}")
+    Call<Boolean> updateProductQuantity(@Path("productID") Long productID,
+                                        @Query("quantity") int quantity,
+                                        @Query("flag") Boolean flag,
+                                        @Header("Authorization") String authorization);
 }

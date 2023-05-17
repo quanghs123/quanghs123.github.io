@@ -24,6 +24,14 @@ public class OrderDetailController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getLocalizedMessage(),ex);
         }
     }
+    @GetMapping("/findTop5Product")
+    ResponseEntity<?> findTop5Product(){
+        return ResponseEntity.ok(orderDetailService.findTop5Product());
+    }
+    @GetMapping("/revenueYear")
+    ResponseEntity<?> revenueYear(){
+        return ResponseEntity.ok(orderDetailService.revenueYear());
+    }
 
     @PostMapping("/addorderdetail")
     ResponseEntity<?> save(@RequestBody OrderDetailDTO orderDetailDto){

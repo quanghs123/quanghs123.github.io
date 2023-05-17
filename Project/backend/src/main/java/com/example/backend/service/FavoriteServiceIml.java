@@ -11,6 +11,8 @@ import com.example.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FavoriteServiceIml implements FavoriteService {
     @Autowired
@@ -53,5 +55,10 @@ public class FavoriteServiceIml implements FavoriteService {
         }
         favoriteRepository.deleteById(favoriteKey);
         return true;
+    }
+
+    @Override
+    public List<Product> findTop5Product() {
+        return favoriteRepository.findTop5Product();
     }
 }

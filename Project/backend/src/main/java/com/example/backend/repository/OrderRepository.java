@@ -1,6 +1,9 @@
 package com.example.backend.repository;
 
 import com.example.backend.model.Order;
+import com.example.backend.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +19,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     List<Order> findByAccountID(@Param("accountID") Long accountID);
     @Query(value = "SELECT o FROM Order o WHERE o.account.accountID = :accountID AND o.status = 1")
     List<Order> findByAccountID1(@Param("accountID") Long accountID);
+
+    @Query(value = "SELECT o FROM Order o")
+    Page<Order> findAllOr(Pageable pageable);
 }

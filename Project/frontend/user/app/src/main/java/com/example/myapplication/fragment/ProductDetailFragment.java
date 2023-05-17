@@ -33,6 +33,7 @@ import com.example.myapplication.service.CartService;
 import com.example.myapplication.service.FavoriteService;
 import com.example.myapplication.service.OrderDetailService;
 import com.example.myapplication.service.OrderService;
+import com.example.myapplication.service.ProductService;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -266,7 +267,12 @@ public class ProductDetailFragment extends Fragment {
             public void onClick(View v) {
                 dialog.dismiss();
                 int quantity = Integer.parseInt(edQuantity.getText().toString().trim());
-                onClickOrder(quantity);
+                if(quantity > product.getProductQuantity() || quantity < 0){
+                    Toast.makeText(mMainActivity, "Product Quantity Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    onClickOrder(quantity);
+                }
             }
         });
         btnIncrease.setOnClickListener(new View.OnClickListener() {
@@ -321,8 +327,7 @@ public class ProductDetailFragment extends Fragment {
                     public void onResponse(Call<OrderDetail> call, Response<OrderDetail> response) {
                         progressDialog.dismiss();
                         if(response.isSuccessful()){
-                            Toast.makeText(mMainActivity, "Order Successful",
-                                    Toast.LENGTH_SHORT).show();
+                            updateProductQuantity(quantity);
                         }
                     }
 
@@ -334,6 +339,30 @@ public class ProductDetailFragment extends Fragment {
                     }
                 });
 
+    }
+
+    private void updateProductQuantity(int quantity) {
+        progressDialog.show();
+        ProductService.productService.updateProductQuantity(product.getProductID(),quantity,true,mMainActivity.getAuthorization())
+                .enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        progressDialog.dismiss();
+                        if (response.isSuccessful()){
+                            if (Boolean.TRUE.equals(response.body())){
+                                Toast.makeText(mMainActivity, "Order successfully",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(mMainActivity, "Call Api Error",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void openAddToCartDialog() {
@@ -382,7 +411,12 @@ public class ProductDetailFragment extends Fragment {
             public void onClick(View v) {
                 dialog.dismiss();
                 int quantity = Integer.parseInt(edQuantity.getText().toString().trim());
-                onClickAddToCart(quantity);
+                if(quantity > product.getProductQuantity() || quantity < 0){
+                    Toast.makeText(mMainActivity, "Product Quantity Error",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    onClickAddToCart(quantity);
+                }
             }
         });
         btnIncrease.setOnClickListener(new View.OnClickListener() {

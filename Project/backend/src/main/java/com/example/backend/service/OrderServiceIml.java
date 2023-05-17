@@ -5,6 +5,8 @@ import com.example.backend.model.Account;
 import com.example.backend.model.Order;
 import com.example.backend.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -38,10 +40,10 @@ public class OrderServiceIml implements OrderService{
     }
 
     @Override
-    public Order update(Order newOrder, Long id) {
+    public Order update(int status, Long id) {
         return orderRepository.findById(id)
                 .map(order->{
-                    order.setStatus(newOrder.getStatus());
+                    order.setStatus(status);
                     return orderRepository.save(order);
                 }).orElseThrow(() -> new NotFoundException("Could not found the order with id = " + id));
     }
@@ -67,6 +69,11 @@ public class OrderServiceIml implements OrderService{
     @Override
     public List<Order> findByAccountId1(Long id) {
         return orderRepository.findByAccountID1(id);
+    }
+
+    @Override
+    public Page<Order> findAllOr(Pageable pageable) {
+        return orderRepository.findAllOr(pageable);
     }
 
 }

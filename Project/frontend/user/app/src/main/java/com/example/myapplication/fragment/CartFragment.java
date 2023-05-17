@@ -23,6 +23,7 @@ import com.example.myapplication.models.OrderDetail;
 import com.example.myapplication.service.CartService;
 import com.example.myapplication.service.OrderDetailService;
 import com.example.myapplication.service.OrderService;
+import com.example.myapplication.service.ProductService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +155,9 @@ public class CartFragment extends Fragment {
                         @Override
                         public void onResponse(Call<OrderDetail> call, Response<OrderDetail> response) {
                             progressDialog.dismiss();
+                            if (response.isSuccessful()){
+                                updateProductQuantity(cart.getCartID().getProductID(),cart.getProductQuantity());
+                            }
                         }
 
                         @Override
@@ -167,6 +171,30 @@ public class CartFragment extends Fragment {
         cartList.clear();
         rcvCart.setAdapter(cartAdapter);
         clearCart();
+    }
+
+    private void updateProductQuantity(Long productID,int quantity) {
+        progressDialog.show();
+        ProductService.productService.updateProductQuantity(productID,quantity,true,mMainActivity.getAuthorization())
+                .enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        progressDialog.dismiss();
+                        if (response.isSuccessful()){
+                            if (Boolean.TRUE.equals(response.body())){
+                                Toast.makeText(mMainActivity, "Order successfully",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(mMainActivity, "Call Api Error",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void clearCart() {

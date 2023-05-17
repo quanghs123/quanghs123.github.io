@@ -3,8 +3,11 @@ package com.example.backend.controller;
 import com.example.backend.model.Account;
 import com.example.backend.model.Brand;
 import com.example.backend.model.Order;
+import com.example.backend.model.Product;
 import com.example.backend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +47,10 @@ public class OrderController {
         }
     }
     @PutMapping("/editorder/{id}")
-    ResponseEntity<?> update(@RequestBody Order order,
-                             @PathVariable(value = "id") Long id){
+    ResponseEntity<?> update(@PathVariable(value = "id") Long id,
+                             @RequestParam(value = "status") int status){
         try {
-            return ResponseEntity.ok(orderService.update(order,id));
+            return ResponseEntity.ok(orderService.update(status,id));
         } catch (IllegalArgumentException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getLocalizedMessage(),ex);
         }
@@ -67,5 +70,12 @@ public class OrderController {
     @GetMapping("/getbyaccountid1/{id}")
     ResponseEntity<?> getByAccountId1(@PathVariable(value = "id") Long id){
         return ResponseEntity.ok(orderService.findByAccountId1(id));
+    }
+    @GetMapping("/getAll/findAllOr")
+    public ResponseEntity<?> findAllOr(@RequestParam("offset") int offset,
+                                       @RequestParam("pageSize") int pageSize) {
+        Page<Order> orders = orderService.findAllOr(PageRequest.of(offset, pageSize));
+        return ResponseEntity.ok(orders);
+
     }
 }

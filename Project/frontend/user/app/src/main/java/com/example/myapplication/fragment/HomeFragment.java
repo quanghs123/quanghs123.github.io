@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 handler.removeCallbacks(runnable);
-                handler.postDelayed(runnable,5000);
+                handler.postDelayed(runnable,2000);
             }
         });
         mViewPager2.setPageTransformer(new DepthPageTransformer());

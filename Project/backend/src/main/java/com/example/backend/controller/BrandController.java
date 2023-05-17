@@ -5,6 +5,8 @@ import com.example.backend.model.DTO.BrandDTO;
 import com.example.backend.service.BrandService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +75,12 @@ public class BrandController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(500).body(ex.getLocalizedMessage());
         }
+    }
+    @GetMapping("/getAll/findAllBr")
+    public ResponseEntity<?> findAllBr(@RequestParam("offset") int offset,
+                                        @RequestParam("pageSize") int pageSize) {
+        Page<Brand> brands = brandService.findAllBr(PageRequest.of(offset, pageSize));
+        return ResponseEntity.ok(brands);
+
     }
 }
